@@ -1,8 +1,11 @@
-import React from 'react'
+import { Routes,Route } from "react-router-dom";
+import "./globals.css";
 
 const App = () => {
   return (
-    <div>App</div>
+    <main className="flex h-screen">
+
+    </main>
   )
 }
 
