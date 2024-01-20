@@ -1,6 +1,3 @@
-// signup.ts
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SignupValidation } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,10 +7,12 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
-import { CreateUserAccount } from "@/lib/appwrite/api";
+import { createUserAccount } from "@/lib/appwrite/api";
+import { useToast } from "@/components/ui/use-toast"
 
 const SignupForm = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const isLoading = false;
+    const {toast}=useToast();
     const form = useForm<z.infer<typeof SignupValidation>>({
         resolver: zodResolver(SignupValidation),
         defaultValues: {
@@ -25,17 +24,14 @@ const SignupForm = () => {
     });
 
     async function onSubmit(values: z.infer<typeof SignupValidation>) {
-        setIsLoading(true);
-        try {
-            const newUser = await CreateUserAccount(values);
-            console.log(newUser);
-            // Kullanıcı oluşturulduğunda başarılı bir mesaj gösterilebilir
-        } catch (error) {
-            console.error("Hata oluştu:");
-            // Kullanıcıya daha anlamlı bir hata mesajı gösterilebilir
-        } finally {
-            setIsLoading(false);
-        }
+        const newUser=await createUserAccount(values);
+       if (!newUser)
+       {
+        return toast({
+         title:'Signup failed. Please, try again.'
+          })
+       }
+       
     }
 
     return (
