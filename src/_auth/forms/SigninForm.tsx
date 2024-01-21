@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { SignupValidation,SigninValidation } from "@/lib/validation";
+import {SigninValidation } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate} from "react-router-dom";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
-import { useCreateUserAccount , useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+import {  useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 
 const SignInForm = () => {
@@ -26,43 +26,27 @@ const SignInForm = () => {
         },
     });
 
-    const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
-        try {
-          const newUser = await createUserAccount(user);
-    
-          if (!newUser) {
-            toast({ title: "Sign up failed. Please try again.", });
-            
-            return;
-          }
-    
-          const session = await signInAccount({
-            email: user.email,
-            password: user.password,
-          });
-    
-          if (!session) {
-            toast({ title: "Something went wrong. Please login your new account", });
-            
-            navigate("/sign-in");
-            
-            return;
-          }
-    
-          const isLoggedIn = await checkAuthUser();
-    
-          if (isLoggedIn) {
-            form.reset();
-            navigate("/");
-          } else {
-            toast({ title: "Login failed. Please try again.", });
-            
-            return;
-          }
-        } catch (error) {
-          console.log({ error });
-        }
-      };
+    const handleSignin = async (user: z.infer<typeof SigninValidation>) => {
+      const session = await signInAccount(user);
+  
+      if (!session) {
+        toast({ title: "Login failed. Please try again." });
+        
+        return;
+      }
+  
+      const isLoggedIn = await checkAuthUser();
+  
+      if (isLoggedIn) {
+        form.reset();
+  
+        navigate("/");
+      } else {
+        toast({ title: "Login failed. Please try again.", });
+        
+        return;
+      }
+    };
 
     return (
         <Form {...form}>
@@ -73,7 +57,7 @@ const SignInForm = () => {
                     Welcome back! Please, enter your details
                 </p>
 
-                <form onSubmit={form.handleSubmit(handleSignup)} className="flex flex-col gap-5 w-full mt-4">
+                <form onSubmit={form.handleSubmit(handleSignin)} className="flex flex-col gap-5 w-full mt-4">
                 
                     <FormField
                         control={form.control}
