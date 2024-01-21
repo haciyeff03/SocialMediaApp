@@ -2,18 +2,23 @@ import { Button } from "@/components/ui/button";
 import { SignupValidation } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
-import { createUserAccount } from "@/lib/appwrite/api";
 import { useToast } from "@/components/ui/use-toast"
+import { useCreateUserAccount , useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
-    const isLoading = false;
     const {toast}=useToast();
-    const form = useForm<z.infer<typeof SignupValidation>>({
+    const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+    const navigate = useNavigate();
+    //query
+    const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } = useCreateUserAccount();
+  const { mutateAsync: signInAccount, isLoading: isSigningInUser } = useSignInAccount();
+   const form = useForm<z.infer<typeof SignupValidation>>({
         resolver: zodResolver(SignupValidation),
         defaultValues: {
             name: '',
@@ -23,16 +28,44 @@ const SignupForm = () => {
         },
     });
 
-    async function onSubmit(values: z.infer<typeof SignupValidation>) {
-        const newUser=await createUserAccount(values);
-       if (!newUser)
-       {
-        return toast({
-         title:'Signup failed. Please, try again.'
-          })
-       }
-       
-    }
+    const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
+        try {
+          const newUser = await createUserAccount(user);
+    
+          if (!newUser) {
+            toast({ title: "Sign up failed. Please try again.", });
+            
+            return;
+          }
+    
+          const session = await signInAccount({
+            email: user.email,
+            password: user.password,
+          });
+    
+          if (!session) {
+            toast({ title: "Something went wrong. Please login your new account", });
+            
+            navigate("/sign-in");
+            
+            return;
+          }
+    
+          const isLoggedIn = await checkAuthUser();
+    
+          if (isLoggedIn) {
+            form.reset();
+    
+            navigate("/");
+          } else {
+            toast({ title: "Login failed. Please try again.", });
+            
+            return;
+          }
+        } catch (error) {
+          console.log({ error });
+        }
+      };
 
     return (
         <Form {...form}>
@@ -43,7 +76,7 @@ const SignupForm = () => {
                     To use Snapgram, please enter your details
                 </p>
 
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
+                <form onSubmit={form.handleSubmit(handleSignup)} className="flex flex-col gap-5 w-full mt-4">
                     <FormField
                         control={form.control}
                         name="name"
@@ -89,7 +122,7 @@ const SignupForm = () => {
                         )}
                     />
                     <Button type="submit" className="shad-button_primary mt-3">
-                        {isLoading ? (
+                        {isCreatingAccount || isSigningInUser || isUserLoading ?  (
                             <div className="flex-center gap-2">
                                 <Loader /> Loading...
                             </div>
