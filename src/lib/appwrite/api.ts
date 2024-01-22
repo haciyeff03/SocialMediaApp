@@ -1,9 +1,9 @@
-import { ID, Query} from "appwrite";
+import { ID, Query } from "appwrite";
 
 import { appwriteConfig, account, databases, avatars } from "./config";
-import {  INewUser} from "@/types";
+import { INewUser } from "@/types";
 
-// create user account 
+// create user account
 export async function createUserAccount(user: INewUser) {
   try {
     const newAccount = await account.create(
@@ -39,7 +39,7 @@ export async function saveUserToDB(user: {
   name: string;
   imageUrl: URL;
   username?: string;
-})   {
+}) {
   try {
     const newUser = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -64,7 +64,7 @@ export async function signInAccount(user: { email: string; password: string }) {
     console.log(error);
   }
 }
-// get account 
+// get account
 export async function getAccount() {
   try {
     const currentAccount = await account.get();
@@ -74,7 +74,6 @@ export async function getAccount() {
     console.log(error);
   }
 }
-
 
 // login current user
 export async function getCurrentUser() {
@@ -98,8 +97,8 @@ export async function getCurrentUser() {
   }
 }
 
- // signout user 
- export async function signOutAccount() {
+// signout user
+export async function signOutAccount() {
   try {
     const session = await account.deleteSession("current");
 

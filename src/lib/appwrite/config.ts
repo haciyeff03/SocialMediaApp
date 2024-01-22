@@ -12,8 +12,8 @@ export const appwriteConfig = {
 
 export const client = new Client();
 
-client.setEndpoint('https://cloud.appwrite.io/v1');
-client.setProject('65885b3fbb322500a1f8');
+client.setEndpoint("https://cloud.appwrite.io/v1");
+client.setProject("65885b3fbb322500a1f8");
 
 export const account = new Account(client);
 export const databases = new Databases(client);
