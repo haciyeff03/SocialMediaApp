@@ -63,7 +63,38 @@ const PostForm = () => {
           </FormItem>
         )}
       />
-      <Button type="submit">Submit</Button>
+          <FormField
+        control={form.control}
+        name="location"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="shad-form_label">Add Location</FormLabel>
+            <FormControl>
+                <Input type="text" className="shad-input"/>
+            </FormControl>
+            <FormMessage className="shad-form_message" />
+          </FormItem>
+        )}
+      />
+       <FormField
+        control={form.control}
+        name="tags"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="shad-form_label">Add Tags (seperated by commo " , " )</FormLabel>
+            <FormControl>
+                <Input type="text" className="shad-input"
+                placeholder="JS, React, Nodejs, NextJS"/>
+            </FormControl>
+            <FormMessage className="shad-form_message" />
+          </FormItem>
+        )}
+      />
+      <div className="flex gap-4 items-center justify-end">
+      <Button type="button" className="shad-button_dark_4">Cancel</Button>
+      <Button type="submit" className="shad-button_primary whitespace-nowrap">Submit</Button>
+
+      </div>
     </form>
   </Form>
   )
