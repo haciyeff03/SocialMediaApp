@@ -1,7 +1,11 @@
 
 const CreatePost = () => {
   return (
-    <div>CreatePost</div>
+    <div className="flex flex-1">
+      <div className="common-container">
+
+      </div>
+    </div>
   )
 }
 
