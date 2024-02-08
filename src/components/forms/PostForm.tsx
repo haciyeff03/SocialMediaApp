@@ -4,16 +4,17 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Form from '@/components/ui/Form';
-import FormControl from '@/components/ui/FormControl';
-import FormField from '@/components/ui/FormField';
-import FormItem from '@/components/ui/FormItem';
-import FormLabel from '@/components/ui/FormLabel';
-import FormMessage from '@/components/ui/FormMessage';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
-import Textarea from '@/components/ui/Textarea';
-
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Button,
+  Input,
+  Textarea,
+} from "@/components/ui";
 import { PostValidation } from "@/lib/validation";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
