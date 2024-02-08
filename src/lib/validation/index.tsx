@@ -15,15 +15,15 @@ export const SigninValidation = z.object({
 // profile validation
 export const ProfileValidation = z.object({
   file: z.custom<File[]>(),
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  username: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  name: z.string().min(3, { message: "Name must be at least 3 characters." }),
+  username: z.string().min(4, { message: "Name must be at least 4 characters." }),
   email: z.string().email(),
   bio: z.string(),
 });
 // post validation
 export const PostValidation = z.object({
-  caption: z.string().min(5, { message: "Minimum 5 characters." }).max(2200, { message: "Maximum 2,200 caracters" }),
+  caption: z.string().min(7, { message: "Minimum 7 characters." }).max(2200, { message: "Maximum 2,200 caracters" }),
   file: z.custom<File[]>(),
-  location: z.string().min(1, { message: "This field is required" }).max(1000, { message: "Maximum 1000 characters." }),
+  location: z.string().min(3, { message: "This field is required" }).max(1000, { message: "Maximum 1000 characters." }),
   tags: z.string(),
 });
