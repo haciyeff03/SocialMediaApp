@@ -14,7 +14,7 @@ import {
   Button,
   Input,
   Textarea,
-} from "@/components/ui";
+} from '@/components/ui/';
 import { PostValidation } from "@/lib/validation";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
@@ -41,9 +41,9 @@ const PostForm = ({ post, action }: PostFormProps) => {
   });
 
   // Query
-  const { mutateAsync: createPost, isLoading: isLoadingCreate } =
+  const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
-  const { mutateAsync: updatePost, isLoading: isLoadingUpdate } =
+  const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
     useUpdatePost();
 
   // Handler
