@@ -15,20 +15,35 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "../ui/textarea"
 import FileUploader from "../shared/FileUploader"
 import { PostValidation } from "@/lib/validation"
- 
+import { Models } from "appwrite";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { useUserContext } from "@/context/AuthContext";
+
+type PostFormProps = {
+  post?: Models.Document;
+  action: "Create" | "Update";
+};
 
 
-
-const PostForm = ({post}) => {
-    const form = useForm<z.infer<typeof PostValidation>>({
-        resolver: zodResolver(PostValidation),
-        defaultValues: {
-          username: "",
-        },
-      })
-      function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-      }
+const PostForm = ({ post, action }: PostFormProps) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { user } = useUserContext();
+  const form = useForm<z.infer<typeof PostValidation>>({
+    resolver: zodResolver(PostValidation),
+    defaultValues: {
+      caption: post ? post?.caption : "",
+      file: [],
+      location: post ? post.location : "",
+      tags: post ? post.tags.join(",") : "",
+    },
+  });
+  const { mutateAsync: createPost, isLoading: isLoadingCreate } =
+  useCreatePost();
+const { mutateAsync: updatePost, isLoading: isLoadingUpdate } =
+  useUpdatePost();
+  
   return (
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-9 w-full max-w-5xl">
