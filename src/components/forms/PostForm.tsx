@@ -14,19 +14,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "../ui/textarea"
 import FileUploader from "../shared/FileUploader"
+import { PostValidation } from "@/lib/validation"
  
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
-
 
 
 
 const PostForm = ({post}) => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof PostValidation>>({
+        resolver: zodResolver(PostValidation),
         defaultValues: {
           username: "",
         },
@@ -72,7 +67,7 @@ const PostForm = ({post}) => {
           <FormItem>
             <FormLabel className="shad-form_label">Add Location</FormLabel>
             <FormControl>
-                <Input type="text" className="shad-input"/>
+                <Input type="text" className="shad-input" {...field}/>
             </FormControl>
             <FormMessage className="shad-form_message" />
           </FormItem>
@@ -86,7 +81,8 @@ const PostForm = ({post}) => {
             <FormLabel className="shad-form_label">Add Tags (seperated by commo " , " )</FormLabel>
             <FormControl>
                 <Input type="text" className="shad-input"
-                placeholder="JS, React, Nodejs, NextJS"/>
+                placeholder="JS, React, Nodejs, NextJS"
+                {...field}/>
             </FormControl>
             <FormMessage className="shad-form_message" />
           </FormItem>
