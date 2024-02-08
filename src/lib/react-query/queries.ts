@@ -49,10 +49,9 @@ import {
     });
   };
   
+  
+  
   // POST QUERIES
-  
-
-  
   
   
   export const useSearchPosts = (searchTerm: string) => {
