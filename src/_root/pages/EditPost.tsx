@@ -1,13 +1,10 @@
 import { useParams } from "react-router-dom";
-
-import { Loader } from "@/components/shared";
 import PostForm from "@/components/forms/PostForm";
 import { useGetPostById } from "@/lib/react-query/queries";
-
+import { Loader } from "lucide-react";
 const EditPost = () => {
   const { id } = useParams();
   const { data: post, isLoading } = useGetPostById(id);
-
   if (isLoading)
     return (
       <div className="flex-center w-full h-full">
