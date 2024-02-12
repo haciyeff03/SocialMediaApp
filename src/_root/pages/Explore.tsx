@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queries";
 import { Loader } from "lucide-react";
 import GridPostList from "@/components/shared/GridPostList";
-
 export type SearchResultProps = {
   isSearchFetching: boolean;
   searchedPosts: any;
 };
-
 const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) => {
   if (isSearchFetching) {
     return <Loader />;
@@ -19,21 +17,17 @@ const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) =
     );
   }
 };
-
 const Explore = () => {
   const { ref, inView } = useInView();
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
-
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearch = useDebounce(searchValue, 500);
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch);
-
   useEffect(() => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
   }, [inView, searchValue]);
-
   if (!posts)
     return (
       <div className="flex-center w-full h-full">
