@@ -11,7 +11,6 @@ const EditPost = () => {
         <Loader />
       </div>
     );
-
   return (
     <div className="flex flex-1">
       <div className="common-container">
@@ -25,11 +24,9 @@ const EditPost = () => {
           />
           <h2 className="h3-bold md:h2-bold text-left w-full">Edit Post</h2>
         </div>
-
         {isLoading ? <Loader /> : <PostForm action="Update" post={post} />}
       </div>
     </div>
   );
 };
-
 export default EditPost;
