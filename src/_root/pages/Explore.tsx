@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-
 import useDebounce from "@/hooks/useDebounce";
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queries";
 import { Input } from "@/components/ui/input";
