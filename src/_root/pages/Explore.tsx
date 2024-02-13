@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+
+import useDebounce from "@/hooks/useDebounce";
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queries";
-import { Loader } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import Loader from "@/components/shared/Loader";
 import GridPostList from "@/components/shared/GridPostList";
+
 export type SearchResultProps = {
   isSearchFetching: boolean;
   searchedPosts: any;
 };
+
 const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) => {
   if (isSearchFetching) {
     return <Loader />;
@@ -17,17 +23,21 @@ const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) =
     );
   }
 };
+
 const Explore = () => {
   const { ref, inView } = useInView();
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
+
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearch = useDebounce(searchValue, 500);
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch);
+
   useEffect(() => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
   }, [inView, searchValue]);
+
   if (!posts)
     return (
       <div className="flex-center w-full h-full">
@@ -62,8 +72,10 @@ const Explore = () => {
           />
         </div>
       </div>
+
       <div className="flex-between w-full max-w-5xl mt-16 mb-7">
         <h3 className="body-bold md:h3-bold">Popular Today</h3>
+
         <div className="flex-center gap-3 bg-dark-3 rounded-xl px-4 py-2 cursor-pointer">
           <p className="small-medium md:base-medium text-light-2">All</p>
           <img
@@ -74,6 +86,7 @@ const Explore = () => {
           />
         </div>
       </div>
+
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResults ? (
           <SearchResults
@@ -88,6 +101,7 @@ const Explore = () => {
           ))
         )}
       </div>
+
       {hasNextPage && !searchValue && (
         <div ref={ref} className="mt-10">
           <Loader />
@@ -96,4 +110,5 @@ const Explore = () => {
     </div>
   );
 };
+
 export default Explore;
