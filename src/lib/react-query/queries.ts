@@ -2,7 +2,7 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
- useInfiniteQuery,
+  useInfiniteQuery,
 } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
@@ -28,7 +28,9 @@ import {
 } from "@/lib/appwrite/api";
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 
+// ============================================================
 // AUTH QUERIES
+// ============================================================
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -49,7 +51,9 @@ export const useSignOutAccount = () => {
   });
 };
 
-
+// ============================================================
+// POST QUERIES
+// ============================================================
 
 export const useGetPosts = () => {
   return useInfiniteQuery({
@@ -62,11 +66,9 @@ export const useGetPosts = () => {
       const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
-    initialPageParam: null,
+    initialPageParam: null, 
   });
 };
-
-// POST QUERIES
 
 export const useSearchPosts = (searchTerm: string) => {
   return useQuery({
